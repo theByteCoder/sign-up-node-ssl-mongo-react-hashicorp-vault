@@ -1,25 +1,18 @@
 const dotEnv = require('dotenv')
 const cors = require('cors')
-const path
-    = require('path')
+const path = require('path')
 const express = require('express')
-const app = express()
 
 dotEnv.config()
 
+const app = express()
 const port = process.env.PORT
-
-// const customMiddleware = (req, res, next) => {
-//     console.log('req', req)
-//     next()
-// }
-// app.use(customMiddleware)
 
 app.use(cors())
 app.use(express.static(path.join(__dirname, "public")))
 
 app.get('/home', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'))
+    res.sendFile(path.join(__dirname, 'templates/index.html'))
 })
 
 app.get('/json', (req, res) => {
@@ -32,7 +25,7 @@ app.get('/name/:id', (req, res) => {
 })
 
 app.get('/about', (req, res) => {
-    res.sendFile(path.join(__dirname, 'about.html'))
+    res.sendFile(path.join(__dirname, 'templates/about.html'))
 })
 
 app.listen(port, () => {
