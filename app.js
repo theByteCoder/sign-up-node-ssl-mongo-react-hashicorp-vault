@@ -9,10 +9,26 @@ dotEnv.config()
 
 const port = process.env.PORT
 
-app.use(cors())
+// const customMiddleware = (req, res, next) => {
+//     console.log('req', req)
+//     next()
+// }
+// app.use(customMiddleware)
 
-app.get('/', (req, res) => {
-    res.send('Hello world')
+app.use(cors())
+app.use(express.static(path.join(__dirname, "public")))
+
+app.get('/home', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'))
+})
+
+app.get('/json', (req, res) => {
+    res.json({"name": "Subhasish"})
+    res.sendStatus(200)
+})
+
+app.get('/name/:id', (req, res) => {
+    res.json({"id": req.params.id})
 })
 
 app.get('/about', (req, res) => {
