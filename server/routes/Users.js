@@ -8,19 +8,16 @@ const cartographer = new Crypto(key);
 
 router.post('/', async (req, res) => {
     try {
-        const name = cartographer.decrypt(req.body.name);
-        const age = cartographer.decrypt(req.body.age);
-        const email = cartographer.decrypt(req.body.email);
         const user = new userSchema({
-            name: name,
-            age: age,
-            email: email,
+            name: cartographer.decrypt(req.body.name),
+            age: cartographer.decrypt(req.body.age),
+            email: cartographer.decrypt(req.body.email),
             password: req.body.password,
         })
         const response = await user.save()
-        res.json({result: response})
+        res.json({ result: response })
     } catch (err) {
-        res.send({message: err.message})
+        res.send({ message: err.message })
     }
 
     /*try {
@@ -45,19 +42,19 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const response = await userSchema.find({_id: req.params.id})
-        res.json({result: response})
+        const response = await userSchema.find({ _id: req.params.id })
+        res.json({ result: response })
     } catch (err) {
-        res.send({message: err.message})
+        res.send({ message: err.message })
     }
 })
 
 router.get('/', async (req, res) => {
     try {
         const response = await userSchema.find({})
-        res.json({result: response})
+        res.json({ result: response })
     } catch (err) {
-        res.send({message: err.message})
+        res.send({ message: err.message })
     }
 })
 
