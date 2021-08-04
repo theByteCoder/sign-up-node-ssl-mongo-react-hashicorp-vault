@@ -11,19 +11,17 @@ const app = express()
 const port = process.env.PORT
 const mongoUri = process.env.MONGO_URI
 
-app.use(cors({origin: 'http://localhost:3000'}))
+app.use(cors({origin: 'https://localhost:3000'}))
 app.use((req, res, next) => {
     const ua = req.headers['user-agent'];
-    console.log(ua)
     if (ua.toString().toLowerCase().startsWith("postman")) {
-        res.statusCode(500)
+        res.status(500)
     }
     next()
 })
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "public")))
-app.use('/book', require(path.join(__dirname, 'routes/Book')))
-app.use('/author', require(path.join(__dirname, 'routes/Author')))
+app.use('/users', require(path.join(__dirname, 'routes/Users')))
 
 const sslServer = https.createServer({
     key: fs.readFileSync(path.join(__dirname, "cert", "key.pem")),
