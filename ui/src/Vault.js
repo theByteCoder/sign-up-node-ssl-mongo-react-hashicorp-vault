@@ -1,4 +1,4 @@
-const options = {
+/* const options = {
     apiVersion: 'v1',
     endpoint: 'http://127.0.0.1:8200',
     token: 's.e4QeGtlSeKDeptnEGOHbSZWN'
@@ -16,4 +16,4 @@ if (!vault) {
         .catch(console.error);
 }
 
-module.exports = vault
+module.exports = vault */
