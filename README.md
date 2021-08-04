@@ -1,6 +1,6 @@
 # Steps to generate SSL certificate
 
-## For Node with OPENSSL
+## with OPENSSL
 
 1. Install **OPENSSL**. If you are on MAC OS, OPENSSL, you already have it installed. For Windows or Linux users, you can use url __https://slproweb.com/products/Win32OpenSSL.html__
 
@@ -19,7 +19,7 @@ To generate a **certificate signing request file** using the above key file, run
 To generate a To generate a **certificate file** run command - **openssl x509 -req -days 3650 -in csr.pem -signkey key.pem -out cert.pem**
    * Note - x509 is format public key certificate
 
-## For React with MKCERT
+## with MKCERT
 
 1. Install **MKCERT**
 
