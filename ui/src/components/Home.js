@@ -68,7 +68,8 @@ const Home = () => {
                 <Toolbar>
                     <IconButton edge="start"
                         className={classes.menuButton}
-                        color="inherit" aria-label="menu">
+                        color="inherit" aria-label="menu"
+                        onClick={() => handleHistoryPush('/')} >
                         <Paper variant="outlined"
                             style={{ backgroundColor: 'black' }}>
                             <img

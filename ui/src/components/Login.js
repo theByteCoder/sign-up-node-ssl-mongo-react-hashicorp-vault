@@ -81,6 +81,7 @@ const Login = () => {
                 setShowToast(true)
             } else {
                 window.sessionStorage.setItem("_user", data.result.success.id);
+                history.push('/')
             }
         }).catch(err => {
             setToastMessage(err.result.error)
@@ -88,7 +89,6 @@ const Login = () => {
             setShowToast(true)
         }).finally(() => {
             handleReset()
-            history.push('/')
         })
     }
 
