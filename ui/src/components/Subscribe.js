@@ -37,8 +37,8 @@ const useStyles = makeStyles({
     btnBack: {
         backgroundColor: "red",
         position: "absolute",
-        left: 10,
-    }
+        left: 200,
+    },
 })
 
 const Subscribe = () => {
@@ -82,17 +82,17 @@ const Subscribe = () => {
                 "password": cartographer.encrypt(password)
             })
         }).then(res => res.json()).then(data => {
-            if (data.result.hasOwnProperty("error")) {
-                setToastMessage(data.result.error)
+            if (data.result?.hasOwnProperty("error")) {
+                setToastMessage(data.result?.error)
                 setToastSeverity("error")
                 setShowToast(true)
             } else {
-                setToastMessage(data.result.success)
+                setToastMessage(data.result?.success)
                 setToastSeverity("success")
                 setShowToast(true)
             }
         }).catch(err => {
-            setToastMessage(err.result.result)
+            setToastMessage(err.result?.result)
             setToastSeverity("error")
             setShowToast(true)
         }).finally(() => {

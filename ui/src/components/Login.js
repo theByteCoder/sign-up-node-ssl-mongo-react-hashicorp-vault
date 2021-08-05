@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     btnBack: {
         backgroundColor: "red",
         position: "absolute",
-        left: 10,
+        left: 200,
     }
 })
 
@@ -75,16 +75,16 @@ const Login = () => {
                 "password": cartographer.encrypt(password)
             })
         }).then(res => res.json()).then(data => {
-            if (data.result.hasOwnProperty("error")) {
-                setToastMessage(data.result.error)
+            if (data.result?.hasOwnProperty("error")) {
+                setToastMessage(data.result?.error)
                 setToastSeverity("error")
                 setShowToast(true)
             } else {
-                window.sessionStorage.setItem("_user", data.result.success.id);
+                window.sessionStorage.setItem("_user", data?.result?.success?.id);
                 history.push('/')
             }
         }).catch(err => {
-            setToastMessage(err.result.error)
+            setToastMessage(err.result?.error)
             setToastSeverity("error")
             setShowToast(true)
         }).finally(() => {

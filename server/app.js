@@ -11,7 +11,7 @@ const app = express()
 const port = process.env.PORT
 const mongoUri = process.env.MONGO_URI
 
-app.use(cors({origin: 'https://localhost:3000'}))
+app.use(cors({ origin: ['https://localhost:3000', 'https://3f5a0d17d4c8.ngrok.io'] }))
 app.use((req, res, next) => {
     const ua = req.headers['user-agent'];
     // for browser - mozilla/5.0 (windows nt 10.0; win64; x64) applewebkit/537.36 (khtml, like gecko) chrome/92.0.4515.107 safari/537.36
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
         !ua.toString().toLowerCase().includes("chrome/") &&
         !ua.toString().toLowerCase().includes("safari/") &&
         ua.toString().toLowerCase().startsWith("postman")) {
-        res.send({result: {error: "Please make request from application only"}})
+        res.send({ result: { error: "Please make request from application only" } })
     }
     next()
 })
@@ -35,7 +35,7 @@ const sslServer = https.createServer({
 }, app)
 
 mongoose.connect(mongoUri,
-    {useNewUrlParser: true, useUnifiedTopology: true}
+    { useNewUrlParser: true, useUnifiedTopology: true }
 ).then(() => console.log(`Mongo connected to ${mongoUri}`))
     .catch(err => {
         console.log(err)
