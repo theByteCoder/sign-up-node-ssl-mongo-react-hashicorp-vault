@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Paper, Button, IconButton } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
+import Toast from './Toast'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,12 +33,36 @@ const Home = () => {
     const classes = useStyles();
     const history = useHistory();
 
+    const [loggedIn, setLoggedIn] = useState(false)
+    const [showToast, setShowToast] = useState(false)
+
+    const handleToastClose = () => {
+        setShowToast(false)
+    }
+
     const handleHistoryPush = (path) => {
         history.push(path)
     }
 
+    const handleLogout = () => {
+        window.sessionStorage.removeItem('_user');
+        setLoggedIn(false)
+        handleHistoryPush('/')
+    }
+
+    useEffect(() => {
+        if (window.sessionStorage.getItem("_user")) {
+            setLoggedIn(true)
+            setShowToast(true)
+        } else {
+            setLoggedIn(false)
+        }
+    }, [])
+
     return (
         <div className={classes.root}>
+            {showToast && <Toast open={showToast} message="Welcome to Hoichoi"
+                severity="success" handleClose={handleToastClose} />}
             <AppBar position="static"
                 style={{ backgroundColor: 'black' }}>
                 <Toolbar>
@@ -65,11 +90,15 @@ const Home = () => {
                         <Button color="inherit"
                             className={classes.linkBtn} >Refer and income</Button>
                     </div>
-                    <Button color="inherit"
-                        className={classes.linkBtn} >Login</Button>
-                    <Button color="inherit" id="btn-subscribe"
+                    {!loggedIn && <Button color="inherit"
+                        className={classes.linkBtn}
+                        onClick={() => handleHistoryPush('/login')} >Login</Button>}
+                    {!loggedIn && <Button color="inherit" id="btn-subscribe"
                         className={classes.btnSubscribe}
-                        onClick={() => handleHistoryPush('/subscribe')} >Subscribe</Button>
+                        onClick={() => handleHistoryPush('/subscribe')} >Subscribe</Button>}
+                    {loggedIn && <Button color="inherit" id="btn-subscribe"
+                        className={classes.btnSubscribe}
+                        onClick={handleLogout} >Logout</Button>}
                 </Toolbar>
             </AppBar>
         </div>

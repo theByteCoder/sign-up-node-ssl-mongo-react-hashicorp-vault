@@ -41,15 +41,13 @@ const useStyles = makeStyles({
     }
 })
 
-const Subscribe = () => {
+const Login = () => {
     const classes = useStyles()
     const history = useHistory();
 
     const key = process.env.REACT_APP_SECRET_KEY
     const cartographer = new Crypto(key);
 
-    const [name, setName] = useState("")
-    const [age, setAge] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [showToast, setShowToast] = useState(false)
@@ -62,8 +60,6 @@ const Subscribe = () => {
     }
 
     const handleReset = () => {
-        setName("")
-        setAge("")
         setEmail("")
         setPassword("")
         setDisableSubmit(true)
@@ -72,13 +68,10 @@ const Subscribe = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         setDisableSubmit(true)
-        fetch('https://localhost:2000/users/', {
+        fetch(`https://localhost:2000/users/${email}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "name": cartographer.encrypt(name),
-                "age": cartographer.encrypt(parseInt(age)),
-                "email": cartographer.encrypt(email),
                 "password": cartographer.encrypt(password)
             })
         }).then(res => res.json()).then(data => {
@@ -87,44 +80,23 @@ const Subscribe = () => {
                 setToastSeverity("error")
                 setShowToast(true)
             } else {
-                setToastMessage(data.result.success)
-                setToastSeverity("success")
-                setShowToast(true)
+                window.sessionStorage.setItem("_user", data.result.success.id);
             }
         }).catch(err => {
-            setToastMessage(err.result.result)
+            setToastMessage(err.result.error)
             setToastSeverity("error")
             setShowToast(true)
         }).finally(() => {
             handleReset()
+            history.push('/')
         })
-
-        /* vault.read('secret/credentials').then(async ({ data }) => {
-  const key = new Crypto(data['cartographer']);
-  const reqName = key.encrypt(name);
-  const reqAge = key.encrypt(age);
-  const reqEmail = key.encrypt(email);
-  const reqPassword = key.encrypt(password);
-  fetch('https://localhost:2000/users/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: {
-      "name": reqName,
-      "age": reqAge,
-      "email": reqEmail,
-      "password": reqPassword
-    }
-  }).then(res => res.json()).then(data => {
-    console.log(data);
-  })
-}) */
     }
 
     useEffect(() => {
-        if (name.length && age.length && email.length && password.length) {
+        if (email.length && password.length) {
             setDisableSubmit(false)
         }
-    }, [name.length, age.length, email.length, password.length])
+    }, [email.length, password.length])
 
     return <div className={classes.root}>
         <Button className={classes.btnBack}
@@ -141,22 +113,8 @@ const Subscribe = () => {
                     <Typography variant="h4"
                         className={classes.typoHeader}
                         component="h5" gutterBottom>
-                        Create Account
+                        Login
                     </Typography>
-                </Grid>
-                <Grid>
-                    <TextField className={classes.inputBox}
-                        id="outlined-name" label="Name"
-                        variant="filled" type="text" value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </Grid>
-                <Grid>
-                    <TextField className={classes.inputBox}
-                        id="outlined-age" label="Age"
-                        variant="filled" type="text" value={age}
-                        onChange={(e) => setAge(e.target.value)}
-                    />
                 </Grid>
                 <Grid>
                     <TextField className={classes.inputBox}
@@ -177,7 +135,7 @@ const Subscribe = () => {
                         variant="contained" color="primary"
                         disableElevation type="submit"
                         disabled={disableSubmit} >
-                        Subscribe
+                        Login
                     </Button>
                 </Grid>
             </form>
@@ -185,4 +143,4 @@ const Subscribe = () => {
     </div>
 }
 
-export default Subscribe
+export default Login

@@ -19,7 +19,7 @@ const Toast = ({ open, message, severity, handleClose }) => {
                 key={vertical + horizontal}
                 autoHideDuration={6000}
             >
-                <Alert severity={severity}>
+                <Alert onClose={handleClose} severity={severity}>
                     {message}
                 </Alert>
             </Snackbar>

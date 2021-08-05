@@ -21,7 +21,7 @@ app.use((req, res, next) => {
         !ua.toString().toLowerCase().includes("chrome/") &&
         !ua.toString().toLowerCase().includes("safari/") &&
         ua.toString().toLowerCase().startsWith("postman")) {
-        res.send({message: "Please make request from application only"})
+        res.send({result: {error: "Please make request from application only"}})
     }
     next()
 })
