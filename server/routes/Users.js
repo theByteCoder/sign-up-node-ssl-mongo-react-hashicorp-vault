@@ -7,17 +7,25 @@ const cartographer = new Crypto(key);
 // const vault = require('../volumes/Vault')
 
 router.post('/', async (req, res) => {
-    try {
-        const user = new userSchema({
-            name: cartographer.decrypt(req.body.name),
-            age: cartographer.decrypt(req.body.age),
-            email: cartographer.decrypt(req.body.email),
-            password: req.body.password,
-        })
-        const response = await user.save()
-        res.json({ result: response })
-    } catch (err) {
-        res.send({ message: err.message })
+    const email = cartographer.decrypt(req.body.email)
+    const found = await userSchema.find({email})
+    if (!res.headersSent) {
+        if (!found.length) {
+            try {
+                const user = new userSchema({
+                    name: cartographer.decrypt(req.body.name),
+                    age: cartographer.decrypt(req.body.age),
+                    email,
+                    password: req.body.password,
+                })
+                const response = await user.save()
+                res.json({message: {success: `Congratulation ${email}, you are now a part of Hoichoi.`}})
+            } catch (err) {
+                res.send({message: {error: err.message}})
+            }
+        } else {
+            res.send({message: {error: `${email} is already subscribed.`}})
+        }
     }
 
     /*try {
@@ -36,25 +44,29 @@ router.post('/', async (req, res) => {
             res.json({result: response})
         })
     } catch (err) {
-        res.send({message: err.message})
+        res.send({message: {error : err.message}})
     }*/
 })
 
 router.get('/:id', async (req, res) => {
-    try {
-        const response = await userSchema.find({ _id: req.params.id })
-        res.json({ result: response })
-    } catch (err) {
-        res.send({ message: err.message })
+    if (!res.headersSent) {
+        try {
+            const response = await userSchema.find({_id: req.params.id})
+            res.json({result: {success: response}})
+        } catch (err) {
+            res.send({message: {error: err.message}})
+        }
     }
 })
 
 router.get('/', async (req, res) => {
-    try {
-        const response = await userSchema.find({})
-        res.json({ result: response })
-    } catch (err) {
-        res.send({ message: err.message })
+    if (!res.headersSent) {
+        try {
+            const response = await userSchema.find({})
+            res.json({result: {success: response}})
+        } catch (err) {
+            res.send({message: {error: err.message}})
+        }
     }
 })
 

@@ -14,8 +14,14 @@ const mongoUri = process.env.MONGO_URI
 app.use(cors({origin: 'https://localhost:3000'}))
 app.use((req, res, next) => {
     const ua = req.headers['user-agent'];
-    if (ua.toString().toLowerCase().startsWith("postman")) {
-        res.status(500)
+    // for browser - mozilla/5.0 (windows nt 10.0; win64; x64) applewebkit/537.36 (khtml, like gecko) chrome/92.0.4515.107 safari/537.36
+    // for postman - postmanruntime/7.28.0
+    if (!ua.toString().toLowerCase().includes("mozilla/") &&
+        !ua.toString().toLowerCase().includes("applewebkit/") &&
+        !ua.toString().toLowerCase().includes("chrome/") &&
+        !ua.toString().toLowerCase().includes("safari/") &&
+        ua.toString().toLowerCase().startsWith("postman")) {
+        res.send({message: "Please make request from application only"})
     }
     next()
 })
